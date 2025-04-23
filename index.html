@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRUD - Ordens de Serviço</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Gerenciamento de Ordens de Serviço</h1>
+        
+
+        <!-- Formulário para Criar/Atualizar Ordem de Serviço -->
+        <form id="form">
+            <input type="text" id="titulo" placeholder="Título da Ordem de Serviço" required>
+            <textarea id="descricao" placeholder="Descrição" required></textarea>
+            <input type="date" id="data-conclusao" required>
+            <input type="text" id="operador" placeholder="Responsável" required>
+            <input type="text" id="local" placeholder="Local da operação" required>
+
+
+            <label for="prioridade">Prioridade:</label>
+            <select id="prioridade">
+                <option value="Baixa">Baixa</option>
+                <option value="Média">Média</option>
+                <option value="Alta">Alta</option>
+            </select>
+            <br>
+
+
+            <label for="status">Status:</label>
+            <select id="status">
+                <option value="Aberta">Aberta</option>
+                <option value="concluída">concluída</option>
+            </select>
+
+            <br>        
+            <label for="departamento">Departamento:</label>
+            <select id="departamento" required>
+                <option value="Eletrica">Eletrica</option>
+                <option value="Refrigeração">Refrigeração</option>
+                <option value="Operador Utilidades">Operador Utilidades</option>
+                <option value="Soldador">Soldador</option>
+                <option value="Mecanico">Mecanico</option>
+                <!-- Adicione mais opções conforme necessário -->
+            </select>
+            <br>
+
+            <button type="submit">Salvar</button>
+        </form>
+
+        <h2>Lista de Ordens de Serviço</h2>
+        <ul id="ordens-lista">
+            <!-- Ordens de serviço serão listadas aqui -->
+        </ul>
+    </div>
+    
+    <div>
+        <button onclick="filtrarOrdens('abertas')">Abertas</button>
+        <button onclick="filtrarOrdens('fechadas')">Fechadas</button>
+        <button onclick="filtrarOrdens('atrasadas')">Atrasadas</button>
+        <a href="deletadas.html"><button onclick="filtrarOrdens('deletadas')">Deletadas</button></a>
+        <button onclick="atualizarLista()">Mostrar Todas</button>
+    </div>
+    
+    <div id="ordens-abertas" class="ordens-lista" style="display:none;">
+        
+        <ul id="lista-abertas">
+            <!-- Ordens abertas aparecerão aqui -->
+        </ul>
+    </div>
+    
+    <div id="ordens-fechadas" class="ordens-lista" style="display:none;">
+        <h2>Ordens Fechadas</h2>
+        <ul id="lista-fechadas">
+            <!-- Ordens fechadas aparecerão aqui -->
+        </ul>
+    </div>
+    
+    <div id="ordens-atrasadas" class="ordens-lista" style="display:none;">
+        <h2>Ordens Atrasadas</h2>
+        <ul id="lista-atrasadas">
+            <!-- Ordens atrasadas aparecerão aqui -->
+        </ul>
+    </div>
+    
+    <script src="ordens.js"></script>
+
+    <script src="script.js"></script>
+</body>
+</html>

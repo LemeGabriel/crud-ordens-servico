@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ordens Deletadas</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Ordens de Serviço Deletadas</h1>
+        <button onclick="voltarParaPrincipal()">Voltar</button>
+        <ul id="lista-deletadas">
+            <!-- Ordens deletadas serão listadas aqui -->
+        </ul>
+    </div>
+    
+    <script src="script.js"></script>
+    <script>
+        function carregarOrdensDeletadas() {
+            const ordens = JSON.parse(localStorage.getItem('ordens')) || [];
+            const listaDeletadas = document.getElementById('lista-deletadas');
+            listaDeletadas.innerHTML = '';
+            
+            ordens.forEach(ordem => {
+                if (ordem.status === 'deletadas') {
+                    const li = document.createElement('li');
+                    li.innerHTML = `
+                        <strong>${ordem.titulo}</strong><br>
+                        ${ordem.descricao}<br>
+                        <em>Data de Conclusão: ${ordem.dataConclusao}</em><br>
+                    `;
+                    listaDeletadas.appendChild(li);
+                }
+            });
+        }
+        
+        function voltarParaPrincipal() {
+            window.location.href = 'index.html';
+        }
+        
+        window.onload = carregarOrdensDeletadas;
+    </script>
+</body>
+</html>

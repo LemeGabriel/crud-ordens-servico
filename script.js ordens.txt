@@ -1,0 +1,137 @@
+// Simulando um banco de dados em memória
+let ordens = [];
+
+// Verifica se o usuário está autenticado
+if (localStorage.getItem("usuarioLogado") !== "true") {
+    window.location.href = "login.html"; // Redireciona para o login se não estiver autenticado
+}
+
+
+// Função para atualizar a lista de ordens no HTML
+function atualizarLista() {
+    const lista = document.getElementById('ordens-lista');
+    lista.innerHTML = ''; // Limpa a lista
+
+    ordens.forEach((ordem, index) => {
+        const li = document.createElement('li');
+        li.innerHTML = `
+            <strong>${ordem.titulo}</strong><br>
+            ${ordem.descricao}<br>
+            <em>Data de Conclusão: ${ordem.dataConclusao}</em><br>
+            <span><strong>Status:</strong> ${ordem.status}</span><br>
+            <button onclick="editarOrdem(${index})">Editar</button>
+            <button onclick="deletarOrdem(${index})">Deletar</button>
+        `;
+        lista.appendChild(li);
+    });
+}
+
+
+// Função para filtrar ordens por status
+function filtrarOrdens(status) {
+    const listaAbertas = document.getElementById('ordens-abertas');
+    const listaFechadas = document.getElementById('ordens-fechadas');
+    const listaAtrasadas = document.getElementById('ordens-atrasadas');
+    const listaDeletadas = document.getElementById('ordens-deletadas');
+
+    // Esconde todas as listas antes de mostrar a filtrada
+    listaAbertas.style.display = 'none';
+    listaFechadas.style.display = 'none';
+    listaAtrasadas.style.display = 'none';
+    listaDeletadas.style.display = 'none';
+
+    let ordensFiltradas = [];
+
+    if (status === 'abertas') {
+        ordensFiltradas = ordens.filter(ordem => ordem.status === 'Aberta');
+        listaAbertas.style.display = 'block';
+    } else if (status === 'fechadas') {
+        ordensFiltradas = ordens.filter(ordem => ordem.status === 'Concluída');
+        listaFechadas.style.display = 'block';
+    } else if (status === 'atrasadas') {
+        ordensFiltradas = ordens.filter(ordem => ordem.status === 'Em Atraso');
+        listaAtrasadas.style.display = 'block';
+    } else if (status === 'deletadas') {
+        ordensFiltradas = ordens.filter(ordem => ordem.status === 'Deletada');
+        listaDeletadas.style.display = 'block';
+    }
+
+    // Exibe as ordens filtradas na lista correspondente
+    const lista = document.getElementById(`lista-${status}`);
+    lista.innerHTML = ''; // Limpa a lista antes de adicionar os itens filtrados
+
+    ordensFiltradas.forEach((ordem, index) => {
+        const li = document.createElement('li');
+        li.innerHTML = `
+            <strong>${ordem.titulo}</strong><br>
+            ${ordem.descricao}<br>
+            <em>Data de Conclusão: ${ordem.dataConclusao}</em><br>
+            <span>Status: ${ordem.status}</span><br>
+            <button onclick="editarOrdem(${index})">Editar</button>
+            <button onclick="deletarOrdem(${index})">Deletar</button>
+        `;
+        lista.appendChild(li);
+    });
+}
+
+
+// Atualizar lista de ordens ao carregar a página
+atualizarLista();
+
+// Função para adicionar ou editar uma ordem
+
+document.getElementById('form').addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    const titulo = document.getElementById('titulo').value;
+    const descricao = document.getElementById('descricao').value;
+    const dataConclusao = document.getElementById('data-conclusao').value;
+
+    // Verifica se algum campo está vazio
+    if (!titulo || !descricao || !dataConclusao) {
+        alert('Por favor, preencha todos os campos!');
+        return; // Interrompe a execução se os campos não estiverem completos
+    }
+
+   // Verificação extra para garantir que a data seja válida
+   const dataConclusaoDate = new Date(dataConclusao);
+   if (isNaN(dataConclusaoDate.getTime())) {
+       alert('Data inválida! Insira uma data no formato correto.');
+       return;
+   }
+
+    // Verifica se a data de conclusão já passou
+    const dataAtual = new Date();
+     let status = 'Aberta'; // Por padrão, a ordem está aberta
+
+    if (dataConclusaoDate < dataAtual) {
+     status = 'Em Atraso'; // Caso a data de conclusão tenha passado
+    }
+
+    // Adiciona o status "Aberta" por padrão
+    const novaOrdem = { titulo, descricao, dataConclusao, status: 'Aberta' };
+    ordens.push(novaOrdem);
+    atualizarLista();
+
+    // Limpar o formulário
+    document.getElementById('form').reset();
+});
+
+// Função para editar uma ordem
+function editarOrdem(index) {
+    const ordem = ordens[index];
+    document.getElementById('titulo').value = ordem.titulo;
+    document.getElementById('descricao').value = ordem.descricao;
+    document.getElementById('data-conclusao').value = ordem.dataConclusao;
+
+    ordens.splice(index, 1); // Remove a ordem para ser recriada
+    atualizarLista();
+}
+
+// Função para deletar uma ordem
+function deletarOrdem(index) {
+    ordens.splice(index, 1);
+    atualizarLista();
+}
+
+atualizarLista();

@@ -1,0 +1,18 @@
+{
+  "name": "crud-ordens-servico",
+  "version": "1.0.0",
+  "main": "cadastro.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.21.2",
+    "msnodesqlv8": "^4.5.0",
+    "mssql": "^7.3.5"
+  },
+  "description": ""
+}
